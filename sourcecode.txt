@@ -1,0 +1,82 @@
+SourceCode of new GGIVE plugin:
+*
+*
+*
+package me.fullmetaljabko;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+
+
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.Locale;
+import java.util.Objects;
+
+
+public class Main extends JavaPlugin {
+
+    public Inventory inv;
+
+    @Override
+    public void onEnable() {
+        getServer().getLogger().info("Plugin is online(GGIVE)");
+    }
+
+    @Override
+    public void onDisable() {
+        getServer().getLogger().info("Plugin is offline(GGIVE)");
+
+
+    }
+
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (label.equalsIgnoreCase("ggive")) {
+            if(args.length >= 4) {
+                if (Bukkit.getServer().getPlayer(args[0]) != null) {
+                    Player p = Bukkit.getServer().getPlayer(args[0]);
+
+                    ItemStack item = new ItemStack(Material.valueOf(args[1].toUpperCase()));
+                    ItemMeta meta = item.getItemMeta();
+                    String name = "";
+                    for(int i = 3; i < args.length; i++){
+                        name = name + " " + args[i];
+                    }
+                    meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
+                    item.setItemMeta(meta);
+                    try{
+                        item.setAmount(Integer.parseInt(args[2]));
+                    }
+                    catch (NumberFormatException e){
+                        sender.sendMessage("This is not number!");
+
+                    }
+
+                    Objects.requireNonNull(p).getInventory().addItem(item);
+                    p.sendMessage(ChatColor.BLUE + args[1].replaceAll("_", " ").toUpperCase() + ChatColor.AQUA  + " You got it");
+                }else {
+                    sender.sendMessage(ChatColor.RED + "This is not a player!");
+                    sender.sendMessage(ChatColor.BLUE + "USE:" + "" + ChatColor.AQUA + "/ggive <nick> <item/block> <Amount> <ItemDisplayName> ");
+                }
+            }
+        }
+        if (label.equalsIgnoreCase("ghelp")) {
+            Player p = (Player) sender;
+            p.sendMessage(ChatColor.BLUE + "GGIVE" + " " + ChatColor.AQUA + ">" + " " + "USE /ggive <nick> <item/block> <Amount> <ItemDisplayName> ");
+
+
+
+        }
+
+        return false;
+
+    }
+
+}
