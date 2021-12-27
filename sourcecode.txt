@@ -38,45 +38,59 @@ public class Main extends JavaPlugin {
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    	
         if (label.equalsIgnoreCase("ggive")) {
-            if(args.length >= 4) {
-                if (Bukkit.getServer().getPlayer(args[0]) != null) {
-                    Player p = Bukkit.getServer().getPlayer(args[0]);
-
-                    ItemStack item = new ItemStack(Material.valueOf(args[1].toUpperCase()));
-                    ItemMeta meta = item.getItemMeta();
-                    String name = "";
-                    for(int i = 3; i < args.length; i++){
-                        name = name + " " + args[i];
-                    }
-                    meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
-                    item.setItemMeta(meta);
-                    try{
-                        item.setAmount(Integer.parseInt(args[2]));
-                    }
-                    catch (NumberFormatException e){
-                        sender.sendMessage("This is not number!");
-
-                    }
-
-                    Objects.requireNonNull(p).getInventory().addItem(item);
-                    p.sendMessage(ChatColor.BLUE + args[1].replaceAll("_", " ").toUpperCase() + ChatColor.AQUA  + " You got it");
-                }else {
-                    sender.sendMessage(ChatColor.RED + "This is not a player!");
-                    sender.sendMessage(ChatColor.BLUE + "USE:" + "" + ChatColor.AQUA + "/ggive <nick> <item/block> <Amount> <ItemDisplayName> ");
-                }
-            }
+        	if(args.length >= 4) {
+        		if(sender.hasPermission("ggive.admin")) {
+	                if (Bukkit.getServer().getPlayer(args[0]) != null) {
+	                    Player p = Bukkit.getServer().getPlayer(args[0]);
+	
+	                    ItemStack item = new ItemStack(Material.valueOf(args[1].toUpperCase()));
+	                    ItemMeta meta = item.getItemMeta();
+	                    String name = "";
+	                    for(int i = 3; i < args.length; i++){
+	                        name = name + " " + args[i];
+	                    }
+	                    meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
+	                    item.setItemMeta(meta);
+	                    try{
+	                        item.setAmount(Integer.parseInt(args[2]));
+	                    }
+	                    catch (NumberFormatException e){
+	                        sender.sendMessage(ChatColor.BLUE + "GGIVE" + ChatColor.RED + ">" + " " + "This is not number!");
+	
+	                    }
+	
+	                    Objects.requireNonNull(p).getInventory().addItem(item);
+	                    p.sendMessage(ChatColor.BLUE + args[1].replaceAll("_", " ").toUpperCase() + ChatColor.AQUA  + " You got it");
+	                }else {
+	                    sender.sendMessage(ChatColor.BLUE + "GGIVE" + ChatColor.RED + ">" + " " + "This is not a player!");
+	                    sender.sendMessage(ChatColor.BLUE + "USE:" + "" + ChatColor.AQUA + "/ggive <nick> <item/block> <Amount> <ItemDisplayName> ");
+	        	
+		            
+	                }   
+	                
+	            }else {
+	            	sender.sendMessage(ChatColor.RED + "You do not have a permissoon to do this.(ggive.admin)");
+	            }
         }
+        
+        	
+        }
+
+        
+
         if (label.equalsIgnoreCase("ghelp")) {
             Player p = (Player) sender;
             p.sendMessage(ChatColor.BLUE + "GGIVE" + " " + ChatColor.AQUA + ">" + " " + "USE /ggive <nick> <item/block> <Amount> <ItemDisplayName> ");
-
-
-
         }
-
-        return false;
-
+        if (label.equalsIgnoreCase("ginfo")) {
+            Player p = (Player) sender;
+            p.sendMessage(ChatColor.BLUE + "GGIVE" + " " + ChatColor.AQUA + ">" + " " + "HelpCommand: /ghelp ");
+            p.sendMessage(ChatColor.BLUE + "GGIVE" + " " + ChatColor.AQUA + ">" + " " + "Plugin version: r1.6 ");
+            p.sendMessage(ChatColor.BLUE + "GGIVE" + " " + ChatColor.AQUA + ">" + " " + "Plugin by: FullMetalJabko ");
+        }
+		return false;
     }
-
 }
+
